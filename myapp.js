@@ -1,7 +1,12 @@
 console.log('This is node routing test');
 
+var wireframeHtml = '../wireframe-template/index.html'
+
+
 var http = require('http');
 var url = require('url');
+var fs = require('fs');
+var homePageHtml = fs.readFileSync('homePageHtml.html');
 
 function renderNewPage(request, response) {
 	response.writeHead(200, {
@@ -16,6 +21,13 @@ function render404(request, response) {
 	response.end('404, Page Not Found!!!');
 }
 
+function renderHomePage(request, response) {
+	response.writeHead(200, {
+		'content-type': 'text/html'
+	});
+	response.end(homePageHtml);
+}
+
 var server = http.createServer(function(request, response) {
 	var newUrl = '/page/new';
 	// renderNewPage(request, response);
@@ -25,7 +37,9 @@ var server = http.createServer(function(request, response) {
 	console.log(pathName);
 	if (newUrl == pathName.pathname) {
 		renderNewPage(request, response);
-	} else {
+	} else if (pathName.pathname == '/') {  
+		renderHomePage(request, response);
+	}else {
 		render404(request, response);
 	}
 });
