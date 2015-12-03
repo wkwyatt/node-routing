@@ -10,18 +10,30 @@ function homePage(request, response) {
 	response.end('<h1>Home Page</h1>');
 }
 
+function aboutPage(request, response) {
+	// user wants to see about page
+	response.writeHead(200, {
+		'content-type':'text/html'
+	});
+	response.end('<h1>About Page</h1>');
+}
+
+function createPage(request, response, page) {
+	// user wants to see about page
+	response.writeHead(200, {
+		'content-type':'text/html'
+	});
+	response.end('<h1>' + page + ' Page</h1>');
+}
+
 var server = http.createServer(function(request, response) {
 	var pathName = url.parse(request.url)
 	switch(pathName.pathname) {
 		case '/':
-			homePage(request, response);
+			createPage(request, response, 'Home');
 			break;
 		case '/about':
-			// user wants to see about page
-			response.writeHead(200, {
-				'content-type':'text/html'
-			});
-			response.end('<h1>About Page</h1>');
+			createPage(request, response, 'About');
 			break;
 		default:
 			response.end('<h1>We dont\'t know where you are!</h1><button>I\'m a button</button>');
