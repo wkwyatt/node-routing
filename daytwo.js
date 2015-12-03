@@ -2,12 +2,17 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 
+var homeHtml = fs.readFileSync('home.html');
+var aboutHtml = fs.readFileSync('about.html');
+var contactHtml = fs.readFileSync('contact.html');
+var errorHtml = fs.readFileSync('error.html');
+
 function homePage(request, response) {
 	// user want to see home
 	response.writeHead(200, {
 		'content-type':'text/html'
 	});
-	response.end('<h1>Home Page</h1>');
+	response.end(homeHtml);
 }
 
 function aboutPage(request, response) {
@@ -15,7 +20,7 @@ function aboutPage(request, response) {
 	response.writeHead(200, {
 		'content-type':'text/html'
 	});
-	response.end('<h1>About Page</h1>');
+	response.end(aboutHtml);
 }
 
 function createPage(request, response, page) {
@@ -23,20 +28,22 @@ function createPage(request, response, page) {
 	response.writeHead(200, {
 		'content-type':'text/html'
 	});
-	response.end('<h1>' + page + ' Page</h1>');
+	response.end(page);
 }
 
 var server = http.createServer(function(request, response) {
 	var pathName = url.parse(request.url)
 	switch(pathName.pathname) {
 		case '/':
-			createPage(request, response, 'Home');
+			createPage(request, response, homeHtml);
 			break;
 		case '/about':
-			createPage(request, response, 'About');
+			createPage(request, response, aboutHtml);
 			break;
+		case '/contact':
+			createPage(request, response, contactHtml);
 		default:
-			response.end('<h1>We dont\'t know where you are!</h1><button>I\'m a button</button>');
+			response.end(errorHtml);
 			break;
 	}
 });
